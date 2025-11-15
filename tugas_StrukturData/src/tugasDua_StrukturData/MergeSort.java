@@ -1,67 +1,80 @@
-package tugasSatu_StrukturData;
+package tugasDua_StrukturData;
 
-import java.util.LinkedList;
+import java.util.Arrays;
 
-public class Tugas1_StrukturData {
-	public static void main(String[] args) {
-		// 1. Deklarasi variabel dengan tipe data integer yang bernama ‘StrukturBaris’
-		int StrukturBaris = 0 ;
-		
-		// Menampilkan isi Integer StrukturBaris
-		System.out.println();
-		System.out.println("Integer Struktur Baris : "+StrukturBaris);
-				
-		
-		// 2. Deklarasi variabel dengan tipe data string yang bernama ‘KataBaru’ yang berisi kata ‘Deklarasi tipe data String’
-		String KataBaru = "Deklarasi tipe data String";
-		
-		// Menampilkan isi String
-		System.out.println();
-		System.out.println("String KataBaru : "+KataBaru);
-		
-		
-		// 3.Pendeklarasian array satu dimensi dengan nama ‘empatAngka’, tipe data integer
-		int[] empatAngka = {7, 10, 20, 23};
-		
-		// Menampilkan isi empatAngka
-		System.out.println();
-		System.out.println("Isi empatAngka : ");
-			for (int i = 0; i < empatAngka.length; i++) {
-				System.out.print(empatAngka[i] + "\t");
-			}
-				
-	
-		// 4. Pendeklarasian array dua dimensi dengan nama ‘Angka’, tipe data String
-		// terdiri dari tiga baris dan tiga kolom, isi baris dan kolom berisi angka berikut :
-		// (1, 3, 5, 14, 19, 20, 22, 27, 29)
-		String[][] Angka = {
-				{"1", "3", "5"},
-				{"14", "19", "20"},
-				{"22", "27", "29"}
-			};
-		
-		// Menampilkan isi array 2 dimensi Angka
-		System.out.println("\n");
-		System.out.println("Isi Array 2 Dimensi Bernama 'Angka' : ");
-			for (int i = 0; i < Angka.length; i++) {
-				for (int j = 0; j < Angka[i].length; j++) {
-					System.out.print(Angka[i][j] + "\t");
-				}
-				System.out.println();
-			}
-	
-			
-		// 5. Deklarasi linked list dengan nama 'listAngka' yang memiliki list (22, 19, 44, 60, 72)
-		LinkedList<Integer> listAngka = new LinkedList<>();
-	
-		listAngka.add(22);
-		listAngka.add(19);
-		listAngka.add(44);
-		listAngka.add(60);
-		listAngka.add(72);
-		
-		// Menampilkan isi listAngka
-		System.out.println();
-		System.out.println("Isi Linked Listed dengan nama 'listAngka' : "+ "\n" + listAngka);
-	}
+public class MergeSort {
+	//Method utama untuk memulai proses Merge Sort
+    public static void mergeSort(int[] arr) {
+        if (arr == null || arr.length < 2) {
+            return; // Array kosong atau hanya satu elemen sudah terurut
+        }
+        
+        // Buat array bantuan (helper array)
+        int[] helper = new int[arr.length];
+        
+        // Panggil fungsi rekursif untuk mengurutkan array
+        mergeSort(arr, helper, 0, arr.length - 1);
+    }
+
+    // Metode rekursif untuk membagi array
+    private static void mergeSort(int[] arr, int[] helper, int low, int high) {
+        if (low < high) {
+            int middle = low + (high - low) / 2;
+            
+            // 1. Bagi array bagian kiri
+            mergeSort(arr, helper, low, middle);
+            
+            // 2. Bagi array bagian kanan
+            mergeSort(arr, helper, middle + 1, high);
+            
+            // 3. Gabungkan (Merge) kedua bagian yang sudah terurut
+            merge(arr, helper, low, middle, high);
+        }
+    }
+
+    // Metode untuk menggabungkan dua sub-array yang sudah terurut (Descending)
+    private static void merge(int[] arr, int[] helper, int low, int middle, int high) {
+        // Salin kedua bagian ke array helper
+        for (int i = low; i <= high; i++) {
+            helper[i] = arr[i];
+        }
+
+        int helperLeft = low;
+        int helperRight = middle + 1;
+        int current = low;
+
+        // Iterasi melalui array helper. Bandingkan elemen dari sub-array kiri dan kanan
+        // Pindahkan elemen yang LEBIH BESAR ke array utama (arr)
+        while (helperLeft <= middle && helperRight <= high) {
+            if (helper[helperLeft] >= helper[helperRight]) {
+                // Elemen dari sub-array kiri lebih besar atau sama
+                arr[current] = helper[helperLeft];
+                helperLeft++;
+            } else {
+                // Elemen dari sub-array kanan lebih besar
+                arr[current] = helper[helperRight];
+                helperRight++;
+            }
+            current++;
+        }
+
+        // Salin sisa elemen dari sub-array kiri (jika ada)
+        // Jika sisa di kanan, biarkan saja karena sudah ada di arr[current..high]
+        int remaining = middle - helperLeft;
+        for (int i = 0; i <= remaining; i++) {
+            arr[current + i] = helper[helperLeft + i];
+        }
+    }
+
+    public static void main(String[] args) {
+        // Data yang digunakan: {12, 5, 18, 12, 3, 21, 1, 18}
+        int[] dataAwal = {12, 5, 18, 12, 3, 21, 1, 18};
+        
+        System.out.println("Data Awal (Input): " + Arrays.toString(dataAwal));
+
+        // Panggil metode pengurutan
+        mergeSort(dataAwal);
+
+        System.out.println("Data Setelah Diurutkan (Descending): " + Arrays.toString(dataAwal));
+    }
 }
